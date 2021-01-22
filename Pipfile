@@ -12,6 +12,7 @@ moviepy = "*"
 ffmpeg = "*"
 spacy = "*"
 textblob = "*"
+tweepy = "*"
 
 [dev-packages]
 
