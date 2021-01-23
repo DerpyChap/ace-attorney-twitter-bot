@@ -6,3 +6,6 @@ assets/
 
 # Ignore ENV file
 .env
+
+# Ignore database
+db/
