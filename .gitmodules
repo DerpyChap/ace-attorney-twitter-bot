@@ -1,0 +1,3 @@
+[submodule "video_processing/reddit_bot"]
+	path = video_processing/reddit_bot
+	url = https://github.com/micah5/ace-attorney-reddit-bot
