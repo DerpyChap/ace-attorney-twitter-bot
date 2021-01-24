@@ -14,6 +14,7 @@ textblob = "*"
 ffmpeg-python = "*"
 tweepy = {editable = true, ref = "video-upload", git = "https://github.com/tweepy/tweepy.git"}
 redis = "*"
+dill = "*"
 
 [dev-packages]
 
