@@ -9,3 +9,10 @@ assets/
 
 # Ignore database
 db/
+
+# Ignore video cache
+video_cache/
+
+# Ignore any media files
+*.mp4
+*.mp3
