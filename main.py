@@ -14,6 +14,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 me = api.me()
 me_mention = f'@{me.screen_name}'
 
+# noinspection PyBroadException
 try:
     api.verify_credentials()
     print("Authentication OK")
@@ -21,6 +22,7 @@ except:
     print("Error during authentication")
 
 if not db.get('since_id'):
+    # noinspection PyBroadException
     try:
         tweet_id = tweepy.Cursor(api.mentions_timeline, count=1).items()[0].id
     except:
@@ -31,26 +33,22 @@ while True:
     print("Fetching mentions")
     # Rate limit for mentions timeline: once very 12 seconds
     # Rate limit for updates GET: once every second
-    for tweet in tweepy.Cursor(api.mentions_timeline, since_id=int(db.get('since_id')), count=200).items():
-        # TODO: Convert potentially troublesome characters into standard letters where applicable
-        # TODO: Language filter
-        # TODO: Better error handling
-        # TODO: Make containers
+    try:
+        for tweet in tweepy.Cursor(api.mentions_timeline, since_id=int(db.get('since_id')), count=200).items():
+            db.set('since_id', tweet.id)
+            if not tweet.in_reply_to_status_id:
+                continue
+            if me_mention not in tweet.text:
+                continue
+            if tweet.user.id == me.id:
+                continue
+            for mention in tweet.entities['user_mentions']:
+                if mention['screen_name'] != me.screen_name:
+                    tweet.text = tweet.text.replace(f'@{mention["screen_name"]}', '')
 
-        print(tweet)
-        db.set('since_id', tweet.id)
-        if not tweet.in_reply_to_status_id:
-            continue
-        if me_mention not in tweet.text:
-            continue
-        if tweet.user.id == me.id:
-            continue
-        for mention in tweet.entities['user_mentions']:
-            if mention['screen_name'] != me.screen_name:
-                tweet.text = tweet.text.replace(f'@{mention["screen_name"]}', '')
-
-        if tweet.text.strip() != me_mention:
-            continue
-        db.rpush('tweet_queue', dill.dumps(tweet))
-
+            if tweet.text.strip() != me_mention:
+                continue
+            db.rpush('tweet_queue', dill.dumps(tweet))
+    except Exception as e:
+        print('Something fucked up: ' + str(e))
     time.sleep(15)

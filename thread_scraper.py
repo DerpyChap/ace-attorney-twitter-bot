@@ -1,9 +1,13 @@
-import tweepy
 import os
-import redis
 import time
+import unicodedata
+
 import dill
-from collections import Counter
+import redis
+import tweepy
+from profanity_filter import ProfanityFilter
+
+pf = ProfanityFilter()
 
 
 # Original script expects a praw.models.Comment model, so let's give it something close enough
@@ -32,13 +36,13 @@ while True:
     out = db.lpop('tweet_queue')
     if out:
         tweet = dill.loads(out)
+        # noinspection PyBroadException
         try:
             last_tweet = api.get_status(tweet.in_reply_to_status_id, tweet_mode='extended')
         except:
             continue
 
         tweets = []
-        print('Iterating over thread...')
         for x in range(0, 50):
             # I think there should be a better solution for stripping mentions and URLs than this but oh well
             for mention in last_tweet.entities['user_mentions']:
@@ -51,13 +55,17 @@ while True:
             last_tweet.full_text = last_tweet.full_text.strip()
             if not last_tweet.full_text:
                 last_tweet.full_text = '...'
+
+            # Just in case
+            last_tweet.full_text = pf.censor(unicodedata.normalize('NFKD', last_tweet.full_text))
+
             tweets.append(last_tweet)
             if not last_tweet.in_reply_to_status_id:
                 break
+            # noinspection PyBroadException
             try:
                 last_tweet = api.get_status(last_tweet.in_reply_to_status_id, tweet_mode='extended')
             except:
-                print('Failed to get last_tweet')
                 break
         if tweets:
             tweets.reverse()
