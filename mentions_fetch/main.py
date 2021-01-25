@@ -30,7 +30,6 @@ if not db.get('since_id'):
     db.set('since_id', tweet_id)
 
 while True:
-    print("Fetching mentions")
     # Rate limit for mentions timeline: once very 12 seconds
     # Rate limit for updates GET: once every second
     try:
