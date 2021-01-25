@@ -43,7 +43,7 @@ while True:
             continue
 
         tweets = []
-        for x in range(0, 50):
+        for x in range(0, 25):
             # I think there should be a better solution for stripping mentions and URLs than this but oh well
             for mention in last_tweet.entities['user_mentions']:
                 if not last_tweet.full_text.startswith('@'):

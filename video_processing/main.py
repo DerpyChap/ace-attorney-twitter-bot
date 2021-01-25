@@ -32,7 +32,7 @@ def reply_thread():
                 os.remove(f'video_cache/{r_tweet.id}.mp4')
             except Exception as _e:
                 print('Something fucked up when tweeting: ' + str(_e))
-            time.sleep(36)
+            time.sleep(18)
         time.sleep(0.01)
 
 
