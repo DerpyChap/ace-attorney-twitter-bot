@@ -1,0 +1,42 @@
+version: '3'
+services:
+  redis:
+    image: redis:alpine
+    command: redis-server --appendonly yes
+    restart: always
+    networks:
+      - internal
+    volumes:
+      - ./db:/data
+  mentions:
+    build: ./mentions_fetch
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - internal
+    env_file:
+      - .env
+  threads:
+    build: ./thread_scraper
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - internal
+    env_file:
+      - .env
+  videos:
+    build: ./video_processing
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - internal
+    env_file:
+      - .env
+    volumes:
+      - ./assets:/app/assets
+      - ./video_cache:/app/video_cache
+networks:
+  internal:

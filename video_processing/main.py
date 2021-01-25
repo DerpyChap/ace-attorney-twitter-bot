@@ -1,6 +1,7 @@
 import os
 import threading
 import time
+import shutil
 from collections import Counter
 
 import dill
@@ -49,7 +50,7 @@ while True:
             anim.comments_to_scene(tweets, characters, output_filename=output_filename)
             if not os.path.exists('video_cache'):
                 os.makedirs('video_cache')
-            os.replace(output_filename, f'video_cache/{output_filename}')
+            shutil.move(output_filename, f'video_cache/{output_filename}')
             db.rpush('reply_queue', dill.dumps(tweet))
         except Exception as e:
             print('Something fucked up when generating the video: ' + str(e))

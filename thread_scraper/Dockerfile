@@ -7,9 +7,10 @@ COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
 
 RUN apt update && \
-  apt install git -y && \
+  apt install hunspell libhunspell-dev git -y && \
   pip install -U pipenv && \
   pipenv install --deploy --system && \
+  python -m spacy download en && \
   apt remove git -y && \
   apt autoremove -y && apt clean && \
   rm -rf /var/lib/apt/lists/* && \
