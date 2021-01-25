@@ -54,3 +54,4 @@ while True:
             db.rpush('reply_queue', dill.dumps(tweet))
         except Exception as e:
             print('Something fucked up when generating the video: ' + str(e))
+    time.sleep(0.01)
