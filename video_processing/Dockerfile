@@ -2,8 +2,6 @@ FROM jjanzic/docker-python3-opencv
 
 WORKDIR /app
 
-RUN adduser --disabled-password --disabled-login --gecos '' python
-
 COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
 
@@ -17,10 +15,7 @@ RUN apt update && \
   rm -rf /var/lib/apt/lists/* && \
   rm -rf ~/.cache/pip/*
 
-RUN chown -R python:python /app
-USER python
-
-COPY --chown=python:python main.py main.py
-COPY --chown=python:python ./reddit_bot ./reddit_bot
+COPY main.py main.py
+COPY ./reddit_bot ./reddit_bot
 
 CMD ["python", "-u", "./main.py"]
