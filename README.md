@@ -1,4 +1,7 @@
 # ace-attorney-twitter-bot
+
+# No longer maintained. I recommend looking at https://github.com/LuisMayo/ace-attorney-twitter-bot instead
+
 A port of the [Ace Attorney reddit bot](https://github.com/micah5/ace-attorney-reddit-bot) by [micah5](https://github.com/micah5) to Twitter.
 
 Summon the bot by replying [@Objection_Bot_](https://twitter.com/Objection_Bot_/) to any Twitter thread involving two or more people.
